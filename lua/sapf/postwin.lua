@@ -15,13 +15,12 @@ function M.create_buf()
 	end
 
 	local buf = vim.api.nvim_create_buf(true, true)
-	api.nvim_buf_set_name(buf, "[sapf]")
-	api.nvim_set_option_value("filetype", "sapf_post", {
+	api.nvim_buf_set_name(buf, "[sapf - repl]")
+	api.nvim_set_option_value("filetype", "sapf_repl", {
 		buf = buf,
 		scope = "local",
 	})
 	M.buf = buf
-	-- M.open()
 	return buf
 end
 
@@ -44,6 +43,7 @@ local function set_win_options()
 	vim.opt_local.tabstop = 4
 	vim.opt_local.wrap = true
 	vim.opt_local.linebreak = true
+	vim.opt_local.scrolloff = 0
 
 	local decorations = {
 		"number",
@@ -100,19 +100,19 @@ function M.toggle()
 	end
 end
 
-function M.post(data)
+function M.post(text)
 	vim.schedule(function()
 		if not M.buf_is_valid() then
-			error("[sapf.nvim] cannot write to post window, buffer doesn't exist or is invalid", vim.log.levels.ERROR)
+			vim.notify("[sapf.nvim] post window buffer is invalid", vim.log.levels.ERROR)
 		end
 
-		if not data then
+		if not text then
 			return
 		end
 
 		local lines = vim.api.nvim_buf_get_lines(M.buf, -2, -1, false)
 		local last_line = lines[1] or ""
-		local appended = last_line .. data
+		local appended = last_line .. text
 		local split = vim.split(appended, "\n", { plain = true })
 
 		vim.api.nvim_buf_set_lines(M.buf, -2, -1, false, split)
