@@ -25,7 +25,6 @@ local function create_autocmds()
 			vim.bo.commentstring = "; %s"
 		end,
 	})
-	---@diagnostic disable-next-line: param-type-mismatch
 	vim.api.nvim_create_autocmd("VimLeavePre", {
 		group = id,
 		pattern = { "sapf", "sapf_post" },
@@ -37,9 +36,6 @@ end
 
 M.setup = function()
 	create_autocmds()
-	if not postwin.buf_is_valid() then
-		postwin.create_buf()
-	end
 end
 
 local function get_paragraph()
