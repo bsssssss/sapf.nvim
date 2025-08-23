@@ -24,6 +24,7 @@ end
 
 function M.start()
 	if M.is_running() then
+        vim.notify("[sapf.nvim] sapf is already running", vim.log.levels.WARN)
 		return
 	end
 
