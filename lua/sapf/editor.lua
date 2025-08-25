@@ -19,7 +19,7 @@ local function create_autocmds()
 	local id = vim.api.nvim_create_augroup("sapf_editor", {})
 	vim.api.nvim_create_autocmd("FileType", {
 		group = id,
-		pattern = { "sapf", "sapf_post" },
+		pattern = { "sapf", "sapf_repl" },
 		callback = function()
 			make_user_commands()
 			vim.bo.commentstring = "; %s"
@@ -27,7 +27,7 @@ local function create_autocmds()
 	})
 	vim.api.nvim_create_autocmd("VimLeavePre", {
 		group = id,
-		pattern = { "sapf", "sapf_post" },
+		pattern = { "sapf", "sapf_repl" },
 		callback = function()
 			repl.terminate()
 		end,
@@ -40,9 +40,9 @@ end
 
 local function get_paragraph()
 	local cursor_pos = vim.api.nvim_win_get_cursor(0)
-	vim.cmd('normal! vip"ty')
+	vim.cmd('normal! vip"sy')
 	vim.api.nvim_win_set_cursor(0, cursor_pos)
-	local paragraph = vim.trim(vim.fn.getreg("t"))
+	local paragraph = vim.trim(vim.fn.getreg("s"))
 	return paragraph
 end
 
